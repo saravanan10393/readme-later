@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: dist
-          path: web
+          path: web/dist
 
       - name: Deploy to firebase
         uses: w9jds/firebase-action@master
