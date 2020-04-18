@@ -24,7 +24,7 @@ jobs:
         run: npm install
 
       - name: Check current directory
-        working-directory: ./web
+        working-directory: ./web/node_modules
         run: echo $(ls)
 
       - name: Check parent directory
