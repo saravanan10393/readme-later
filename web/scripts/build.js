@@ -1,45 +1,47 @@
-
-
 // Do this as the first thing so that any code reading it knows the right env.
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+process.env.BABEL_ENV = "production";
+process.env.NODE_ENV = "production";
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on('unhandledRejection', err => {
+process.on("unhandledRejection", err => {
   throw err;
 });
 
 // Ensure environment variables are read.
-require('../config/env');
+require("../config/env");
 
-const path = require('path');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const webpack = require('webpack');
-const config = require('../config/webpack.config.prod');
-const paths = require('../config/paths');
-const shell = require('shelljs');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
-const printBuildError = require('react-dev-utils/printBuildError');
+const path = require("path");
+const chalk = require("chalk");
+const fs = require("fs-extra");
+const webpack = require("webpack");
+const config = require("../config/webpack.config.prod");
+const paths = require("../config/paths");
+const shell = require("shelljs");
+const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
+const formatWebpackMessages = require("react-dev-utils/formatWebpackMessages");
+const printHostingInstructions = require("react-dev-utils/printHostingInstructions");
+const FileSizeReporter = require("react-dev-utils/FileSizeReporter");
+const printBuildError = require("react-dev-utils/printBuildError");
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
-if(!fs.existsSync(paths.resolvePath("src/core/"))) {
-  console.log('COPYING CORE TO SRC');
-  shell.exec(`cp -R ${paths.resolvePath('../client/core')} ${paths.resolvePath('src/')}`);
-}else{
-  console.log('DELETING CORE FROM SRC');
-  shell.exec(`rm -rf ${paths.resolvePath('src/core')}`);
-  console.log('COPYING CORE TO SRC');
-  shell.exec(`cp -R ${paths.resolvePath('../client/core')} ${paths.resolvePath('src/')}`);
+if (!fs.existsSync(paths.resolvePath("src/core/"))) {
+  console.log("COPYING CORE TO SRC");
+  shell.exec(
+    `cp -R ${paths.resolvePath("../client/core")} ${paths.resolvePath("src/")}`
+  );
+} else {
+  console.log("DELETING CORE FROM SRC");
+  shell.exec(`rm -rf ${paths.resolvePath("src/core")}`);
+  console.log("COPYING CORE TO SRC");
+  shell.exec(
+    `cp -R ${paths.resolvePath("../client/core")} ${paths.resolvePath("src/")}`
+  );
 }
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
@@ -48,7 +50,7 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 //if build is triggered in local, the call build process immediately
 //else build will be triggered by forked child process from client module.
-if(!process.env.CI_BUILD) {
+if (!process.env.CI_BUILD) {
   startToBuild();
 }
 
@@ -74,23 +76,23 @@ function startToBuild(onBuildSuccessCb) {
     .then(
       ({ stats, previousFileSizes, warnings }) => {
         if (warnings.length) {
-          console.log(chalk.yellow('Compiled with warnings.\n'));
-          console.log(warnings.join('\n\n'));
+          console.log(chalk.yellow("Compiled with warnings.\n"));
+          console.log(warnings.join("\n\n"));
           console.log(
-            '\nSearch for the ' +
-              chalk.underline(chalk.yellow('keywords')) +
-              ' to learn more about each warning.'
+            "\nSearch for the " +
+              chalk.underline(chalk.yellow("keywords")) +
+              " to learn more about each warning."
           );
           console.log(
-            'To ignore, add ' +
-              chalk.cyan('// eslint-disable-next-line') +
-              ' to the line before.\n'
+            "To ignore, add " +
+              chalk.cyan("// eslint-disable-next-line") +
+              " to the line before.\n"
           );
         } else {
-          console.log(chalk.green('Compiled successfully.\n'));
+          console.log(chalk.green("Compiled successfully.\n"));
         }
 
-        console.log('File sizes after gzip:\n');
+        console.log("File sizes after gzip:\n");
         printFileSizesAfterBuild(
           stats,
           previousFileSizes,
@@ -114,7 +116,7 @@ function startToBuild(onBuildSuccessCb) {
         onBuildSuccessCb();
       },
       err => {
-        console.log(chalk.red('Failed to compile.\n'));
+        console.log(chalk.red("Failed to compile.\n"));
         printBuildError(err);
         process.exit(1);
       }
@@ -122,13 +124,13 @@ function startToBuild(onBuildSuccessCb) {
 
   // Create the production build and print the deployment instructions.
   function build(previousFileSizes) {
-    console.log('Creating an optimized production build...');
+    console.log("Creating an optimized production build...");
 
     let compiler = webpack(config);
     return new Promise((resolve, reject) => {
       compiler.run((err, stats) => {
         if (err) {
-          return reject(err); 
+          return reject(err);
         }
 
         stats.errors = stats.errors || [];
@@ -141,50 +143,56 @@ function startToBuild(onBuildSuccessCb) {
           if (messages.errors.length > 1) {
             messages.errors.length = 1;
           }
-          return reject(new Error(messages.errors.join('\n\n')));
+          return reject(new Error(messages.errors.join("\n\n")));
         }
         if (
           process.env.CI &&
-          (typeof process.env.CI !== 'string' ||
-            process.env.CI.toLowerCase() !== 'false') &&
+          (typeof process.env.CI !== "string" ||
+            process.env.CI.toLowerCase() !== "false") &&
           messages.warnings.length
         ) {
           console.log(
             chalk.yellow(
-              '\nTreating warnings as errors because process.env.CI = true.\n' +
-                'Most CI servers set it automatically.\n'
+              "\nTreating warnings as errors because process.env.CI = true.\n" +
+                "Most CI servers set it automatically.\n"
             )
           );
-          return reject(new Error(messages.warnings.join('\n\n')));
+          return reject(new Error(messages.warnings.join("\n\n")));
         }
 
-        if(process.env.CLEAR_CACHE == 'true') {
-          let fs = require('fs');
-          let swStr = fs.readFileSync(path.resolve(__dirname, '../build/service-worker-web.js')).toString();
-          let randomStr = new Array(new Date().getDay()).fill("*").join('');
+        if (process.env.CLEAR_CACHE == "true") {
+          let fs = require("fs");
+          let swStr = fs
+            .readFileSync(
+              path.resolve(__dirname, "../build/service-worker-web.js")
+            )
+            .toString();
+          let randomStr = new Array(new Date().getDay()).fill("*").join("");
           swStr = "/* " + randomStr + " */ \n" + swStr;
-          fs.writeFileSync(path.resolve(__dirname, '../build/service-worker-web.js'), swStr);
+          fs.writeFileSync(
+            path.resolve(__dirname, "../build/service-worker-web.js"),
+            swStr
+          );
         }
-        
+
         return resolve({
           stats,
           previousFileSizes,
-          warnings: messages.warnings,
+          warnings: messages.warnings
         });
       });
-    })
+    });
   }
 
   function copyPublicFolder() {
     fs.copySync(paths.appPublic, paths.appBuild, {
       dereference: true,
-      filter: file => file !== paths.appHtml,
+      filter: file => file !== paths.appHtml
     });
   }
-
 }
 
 module.exports = function(args, callback) {
-  console.log('************ web build is triggered from client ************');
+  console.log("************ web build is triggered from client ************");
   startToBuild(callback);
-}
+};

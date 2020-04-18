@@ -13,11 +13,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 // Split the global css into appropriate js module chunks
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const HappyPack = require("happypack");
-const ThreadPool = HappyPack.ThreadPool({ size: 3 });
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
-const InjectExternalsPlugin = require("./inject.external");
 //preload the all async chunck for now, it needs to given to developer hand in the future
 //via loadable or simple-cache-provider
 // const PreloadWebpackPlugin = require('preload-webpack-plugin');
@@ -120,10 +116,6 @@ const prdConfig = {
       // TODO: Disable require.ensure as it's not a standard language feature.
       // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
       // { parser: { requireEnsure: false } },
-      {
-        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: "happypack/loader?id=fonts"
-      },
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {

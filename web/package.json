@@ -22,14 +22,7 @@
     "start-dev": "PORT=3000 node scripts/start.js",
     "build": "node scripts/build.js",
     "profile": "PROFILE=true node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "test:ci": "NODE_ICU_DATA=node_modules/full-icu  node scripts/test.js --coverage --env=jsdom --ci --testResultsProcessor='jest-junit'",
-    "eslint": "eslint --quiet -f json -o ./.reports/staticAnalysis.json .; exit 0",
-    "add-locale": "lingui add-locale en pt es fr de it",
-    "extract": "lingui extract --clean --verbose",
-    "translate": "lingui compile --verbose"
+    "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
     "collectCoverage": true,
@@ -175,6 +168,7 @@
     "url-loader": "4.0.0",
     "webpack": "^5.0.0-beta.13",
     "webpack-bundle-analyzer": "^3.6.1",
+    "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-manifest-plugin": "^2.2.0",
     "worker-farm": "^1.7.0"
