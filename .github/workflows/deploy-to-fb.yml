@@ -19,11 +19,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@master
 
-      - name: Use Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "12.x"
-
       - name: Install dependencies
         working-directory: ./web
         run: npm ci
@@ -51,7 +46,7 @@ jobs:
     needs: build
     steps:
       - name: Download build files
-        uses: action/download-artifact@master
+        uses: actions/download-artifact@v1
         with:
           name: dist
 
