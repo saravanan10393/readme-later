@@ -65,7 +65,8 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-manifest-plugin": "^2.2.0",
     "worker-farm": "^1.7.0",
-    "zustand": "^2.2.3"
+    "zustand": "^2.2.3",
+    "html-webpack-plugin": "^4.0.0-beta.14"
   },
   "scripts": {
     "start": "PORT=80 node scripts/start.js",
