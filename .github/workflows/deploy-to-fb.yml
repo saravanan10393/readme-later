@@ -26,7 +26,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./web
-        run: npm ci
+        run: NODE_ENV=development npm install
 
       - name: Check current directory
         working-directory: ./web/node_modules
