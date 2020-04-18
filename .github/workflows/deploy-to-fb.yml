@@ -19,13 +19,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@master
 
-      - name: Check current directory
-        working-directory: ./web
-        run: echo $(pwd)
-
       - name: Install dependencies
         working-directory: ./web
         run: npm install
+
+      - name: Check current directory
+        working-directory: ./web
+        run: echo $(ls)
+
+      - name: Check parent directory
+        run: echo $(ls)
 
       - name: Take prd build
         working-directory: ./web
