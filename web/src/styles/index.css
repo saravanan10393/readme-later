@@ -1,0 +1,233 @@
+@import 'variables.css';
+@import 'override.css';
+@import 'reset.css';
+
+@font-face {
+  font-family: "Baloo Thambi 2";
+  src: url("./fonts/BalooThambi2-Regular.ttf") format("truetype"),
+    url("./fonts/BalooThambi2-SemiBold.ttf") format("truetype")
+}
+
+html {
+  font-size: 10px;
+  font-family: 'Baloo Thambi 2', cursive;
+}
+
+@media only screen and (min-width:1600px) {
+  html {
+    font-size: 11px;
+  }
+}
+
+@media screen {
+  #root {
+    height: 100%;
+  }
+}
+
+/* globally remove the focus outline on any element */
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
+.thamarai, .thamarai-400, .thamarai-600 {
+  font-size: var(--font-size-36);
+  font-weight: var(--font-weight-500);
+  line-height: 1.28;
+  letter-spacing: -1.2px;
+  color: var(--text-gray-4);
+}
+
+.ambal, .ambal-400, .ambal-600 {
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-500);
+  line-height: 1.31;
+  letter-spacing: -1px;
+  color: var(--text-gray-4);
+}
+
+.kuvalai, .kuvalai-400, .kuvalai-600 {
+  font-size: var(--font-size-28);
+  font-weight: var(--font-weight-500);
+  line-height: 1.29;
+  letter-spacing: -0.96px;
+  color: var(--text-gray-4);
+}
+
+.thalavam, .thalavam-400, .thalavam-600 {
+  font-size: var(--font-size-24);
+  font-weight: var(--font-weight-500);
+  line-height: 1.33;
+  letter-spacing: -0.56px;
+  color: var(--text-gray-4);
+}
+
+.kurinci, .kurinci-400, .kurinci-600 {
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-500);
+  line-height: 1.5;
+  letter-spacing: -0.5px;
+  color: var(--text-gray-4);
+}
+
+.chemmal, .chemmal-400, .chemmal-600 {
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-500);
+  line-height: 1.56;
+  letter-spacing: -0.3px;
+  color: var(--text-gray-4);
+}
+
+.sulli, .sulli-400, .sulli-600 {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-500);
+  line-height: 1.63;
+  letter-spacing: -0.2px;
+  color: var(--text-gray-4);
+}
+
+.placeholder {
+  color: var(--text-gray-2);
+}
+
+.marutham, .marutham-400, .marutham-600, .placeholder {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-500);
+  line-height: 1.57;
+  letter-spacing: -0.1px;
+  color: var(--text-gray-4);
+}
+
+.thilagam, .thilagam-400, .thilagam-600 {
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-500);
+  line-height: 1.54;
+  letter-spacing: -0.1px;
+  color: var(--text-gray-4);
+}
+
+.kuravam, .kuravam-400, .kuravam-600 {
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-500);
+  line-height: 1.67;
+  letter-spacing: normal;
+  color: var(--text-gray-3);
+}
+
+.sural, .sural-400, .sural-600 {
+  font-size: var(--font-size-11);
+  font-weight: var(--font-weight-500);
+  line-height: 1.64;
+  letter-spacing: normal;
+  color: var(--text-gray-2);
+}
+
+.thamarai-400,
+.ambal-400,
+.kuvalai-400,
+.thalavam-400,
+.kurinci-400,
+.chemmal-400,
+.sulli-400,
+.marutham-400,
+.thilagam-400,
+.kuravam-400,
+.sural-400 {
+  font-weight: var(--font-weight-400);
+}
+
+.thamarai-600,
+.ambal-600,
+.kuvalai-600,
+.thalavam-600,
+.kurinci-600,
+.chemmal-600,
+.sulli-600,
+.marutham-600,
+.thilagam-600,
+.kuravam-600,
+.sural-600 {
+  font-weight: var(--font-weight-600);
+}
+
+
+@media screen {
+  .rootContainer {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+          line-clamp: 3;
+  -webkit-box-orient: vertical;
+          box-orient: vertical;
+}
+
+*:focus, *:focus-visible{ outline: none }
+
+
+
+.pdf, .ppt {
+  background: rgb(var(--secondary-4-main));
+  color: rgb(var(--white));
+}
+.xls {
+  background: rgb(var(--primary-right-main));
+  color: rgb(var(--white));
+}
+.doc, .txt {
+  background: rgb(var(--secondary-6-main));
+  color: rgb(var(--white));
+}
+.mp3 {
+  background: rgb(var(--secondary-3-main));
+  color: rgb(var(--white));
+}
+
+/* fix for richtext over space issue */
+/* span[data-slate-zero-width="n"]{
+  display: none;
+} */
+
+.tippy-popper {
+  font-size: 1.2rem;
+}
+.tippy-tooltip {
+  background: white !important;
+  color: rgb(var(--gray-3));
+  box-shadow: var(--box-shadow-2);
+  border-radius: 0;
+  padding: var(--space-4) var(--space-8);
+}
+
+.tippy-backdrop {
+  background: rgb(var(--white)) !important;
+}
+
+.tippy-content {
+  color: rgb(var(--gray-3)) !important;
+  font-size: 1.2rem !important;
+}
+
+@media print {
+  .rootContainer {
+    height: 100%;
+    overflow: visible;
+  }
+}
+
+video {
+  max-width: 100%;
+}
+
+blockquote pre {
+  white-space: normal;
+}
+
+.emoji-mart-bar {
+  border: none !important;
+}

@@ -1,0 +1,32 @@
+.bp3-select-popover .bp3-menu{
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -10px; /* gutter size offset */
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 10px; /* gutter size */
+  background-clip: padding-box;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.zoomIn {
+  -webkit-animation-name: zoomIn;
+  animation-name: zoomIn;
+}

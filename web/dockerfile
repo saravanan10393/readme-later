@@ -1,0 +1,14 @@
+FROM node:latest
+
+ENV APP=/app
+RUN mkdir -p $APP
+
+COPY package.json $APP/package.json
+
+COPY . $APP
+
+WORKDIR $APP
+
+EXPOSE 80
+
+CMD ["npm", "start"]

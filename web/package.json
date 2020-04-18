@@ -1,0 +1,182 @@
+{
+  "name": "readme-later",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "/",
+  "dependencies": {
+    "@babel/runtime": "^7.8.7",
+    "@blueprintjs/core": "^3.24.0",
+    "@blueprintjs/icons": "^3.14.0",
+    "@blueprintjs/select": "^3.12.0",
+    "dexie": "^2.0.4",
+    "immer": "^6.0.3",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-masonry-css": "^1.0.14",
+    "react-router-dom": "^5.1.2",
+    "zustand": "^2.2.3"
+  },
+  "scripts": {
+    "start": "PORT=80 node scripts/start.js",
+    "start-dev": "PORT=3000 node scripts/start.js",
+    "build": "node scripts/build.js",
+    "profile": "PROFILE=true node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "test:ci": "NODE_ICU_DATA=node_modules/full-icu  node scripts/test.js --coverage --env=jsdom --ci --testResultsProcessor='jest-junit'",
+    "eslint": "eslint --quiet -f json -o ./.reports/staticAnalysis.json .; exit 0",
+    "add-locale": "lingui add-locale en pt es fr de it",
+    "extract": "lingui extract --clean --verbose",
+    "translate": "lingui compile --verbose"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "coverageDirectory": "<rootDir>/.reports/coverage",
+    "setupTestFrameworkScriptFile": "<rootDir>/config/setupTests.js",
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js",
+      "<rootDir>/mock/browser.mock.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.js?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "\\.(css)$": "<rootDir>/node_modules/identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ]
+  },
+  "jest-junit": {
+    "suiteName": "jest tests",
+    "output": "./.reports/junit.xml",
+    "classNameTemplate": "{classname}-{title}",
+    "titleTemplate": "{classname}-{title}",
+    "ancestorSeparator": " › ",
+    "usePathForSuiteName": "true"
+  },
+  "browserslist": [
+    "last 3 version",
+    "> 1%",
+    "Firefox ESR",
+    "not ie < 9"
+  ],
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      "macros"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "lingui": {
+    "compileNamespace": "es",
+    "fallbackLocale": "en",
+    "sourceLocale": "en",
+    "localeDir": "<rootDir>/src/resource/locales",
+    "srcPathDirs": [
+      "<rootDir>/src"
+    ],
+    "srcPathIgnorePatterns": [
+      "/node_modules/",
+      "/locales/"
+    ],
+    "format": "minimal"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@lingui/cli": "2.9.1",
+    "@lingui/macro": "^2.9.1",
+    "@storybook/addon-a11y": "^5.3.17",
+    "@storybook/addon-centered": "^5.3.17",
+    "@storybook/addon-docs": "^5.3.17",
+    "@storybook/addon-knobs": "5.3.17",
+    "@storybook/addons": "5.3.17",
+    "@storybook/react": "5.3.17",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^10.0.1",
+    "autoprefixer": "^9.7.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-dual-import": "^1.2.1",
+    "babel-plugin-macros": "^2.8.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react-app": "^9.1.1",
+    "babel-runtime": "^6.26.0",
+    "case-sensitive-paths-webpack-plugin": "2.3.0",
+    "chalk": "3.0.0",
+    "compression-webpack-plugin": "^3.1.0",
+    "critters-webpack-plugin": "^2.5.0",
+    "css-loader": "^3.4.2",
+    "dotenv": "8.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-react-app": "^5.2.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-flowtype": "^4.6.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.1",
+    "file-loader": "^6.0.0",
+    "fs-extra": "9.0.0",
+    "full-icu": "^1.3.1",
+    "happypack": "^5.0.1",
+    "html-webpack-plugin": "git+ssh://git@github.com/PutziSan/html-webpack-plugin.git",
+    "identity-obj-proxy": "^3.0.0",
+    "interpolate-html-plugin": "^3.0.0",
+    "jest": "^25.1.0",
+    "jest-fetch-mock": "^3.0.3",
+    "jest-junit": "^10.0.0",
+    "mark.js": "^8.11.1",
+    "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-flexbugs-fixes": "4.2.0",
+    "postcss-loader": "3.0.0",
+    "preload-webpack-plugin": "^3.0.0-beta.4",
+    "react-dev-utils": "10.2.0",
+    "react-scripts": "^3.4.0",
+    "shelljs": "^0.8.3",
+    "sinon": "^9.0.1",
+    "style-loader": "^1.1.3",
+    "terser-webpack-plugin": "^2.3.5",
+    "url-loader": "4.0.0",
+    "webpack": "^5.0.0-beta.13",
+    "webpack-bundle-analyzer": "^3.6.1",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-manifest-plugin": "^2.2.0",
+    "worker-farm": "^1.7.0"
+  }
+}

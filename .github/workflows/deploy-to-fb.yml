@@ -1,0 +1,52 @@
+name: Deploy to firebase
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+env:
+  NODE_ENV: production
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
+
+      - name: Install dependencies
+        working-directory: ./web
+        run: npm install
+
+      - name: Take prd build
+        working-directory: ./web
+        run: npm run build
+
+      - name: Save build files
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: web/build
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download build files
+        uses: action/download-artifact@master
+        with:
+          name: dist
+
+      - name: Deploy to firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

@@ -1,0 +1,221 @@
+@media screen {
+  input,
+  textarea,
+  input:focus,
+  textarea:focus,
+  select,
+  button{
+    outline: none;
+  }
+
+  .relative{
+    position: relative;
+  }
+
+  .pointer{
+    cursor: pointer;
+  }
+
+  .arrow:after,
+  .arrow:before{
+    content: "";
+    width: 13px;
+    height: 1px;
+    position: absolute;
+    background: #333;
+  }
+
+  .arrow.left:after{
+    content:"";
+    transform: rotate(-45deg);
+    left: calc(100% - 10px);
+    top: 3px;
+  }
+  .arrow.left:before{
+    transform: rotate(45deg);
+    background: #333;
+    top: -5px;
+    left: calc(100% - 10px);
+  }
+
+  .arrow.right:after{
+    content:"";
+    transform: rotate(45deg);
+    /* left: calc(100% - 10px); */
+    top: 3px;
+    left: -3px;
+  }
+  .arrow.right:before{
+    transform: rotate(-45deg);
+    background: #333;
+    top: -7px;
+    left: -3px;
+  }
+  /* added to the body element when shown; prevent scrolling */
+  .react-router-modal__modal-open {
+    overflow: hidden;
+  }
+
+  /* container that contains all modals and backdrops */
+  .react-router-modal__container {
+    position: fixed;
+    z-index: 99;
+  }
+
+  /* backdrop shown behind each modal */
+  .react-router-modal__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5)
+  }
+
+  /* wrapper element for the modal component */
+  .react-router-modal__modal {
+    position: fixed;
+    height: calc(100% - var(--space-16));
+    width: calc(100% - var(--space-16));
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+
+    background-color: white;
+    border-radius: 3px;
+  }
+
+  .errorMessage{
+    color: rgb(var(--secondary-4-main));
+    /* TODO-Remove this margin and ask owners to check layout */
+    margin-top: 0.5rem;
+  }
+
+  .truncate{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Start override highlighting css for the mark.js library */
+  mark {
+    background-color: rgba(var(--secondary-6-light45), 1);
+    color: inherit;
+  }
+  /* End override highlighting css for the mark.js library */
+
+  .toastOverride{
+    background: transparent;
+    box-shadow: none;
+  }
+  .toastWarning {
+    background: rgb(var(--secondary-3-light45));
+    color: rgb(var(--gray-3));
+  }
+  .toastWarning button {
+    color: var(--gray-8);
+  }
+
+  /* font size variants */
+  .font-weight-normal{
+    font-weight: var(--font-weight-normal);
+  }
+  .font-weight-medium{
+    font-weight: var(--font-weight-medium);
+  }
+  .font-weight-bold{
+    font-weight: var(--font-weight-bold);
+  }
+  /* font size variants ends */
+
+
+  /* colors variants */
+  .gray-1{
+    color: var(--gray-1);
+  }
+  .gray-2{
+    color: var(--gray-2);
+  }
+  .gray-3{
+    color: var(--gray-3);
+  }
+  .gray-4{
+    color: var(--gray-4);
+  }
+  .gray-5{
+    color: var(--gray-5);
+  }
+  .gray-6{
+    color: var(--gray-6);
+  }
+  .gray-7{
+    color: var(--gray-7);
+  }
+  .gray-8{
+    color: var(--gray-8);
+  }
+  .gray-9{
+    color: var(--gray-9);
+  }
+  .gray-10{
+    color: var(--gray-10);
+  }
+  .gray-11{
+    color: var(--gray-11);
+  }
+  .gray-12{
+    color: var(--gray-12);
+  }
+  .gray-13{
+    color: var(--gray-13);
+  }
+  .gray-14{
+    color: var(--gray-14);
+  }
+  .gray-15{
+    color: var(--gray-15);
+  }
+  .gray-16{
+    color: var(--gray-16);
+  }
+  .gray-17{
+    color: var(--gray-17);
+  }
+  /* color variants ends */
+  .line-clamp
+{
+	display            : block;
+	display            : -webkit-box;
+	-webkit-box-orient : vertical;
+	position           : relative;
+	overflow           : hidden;
+	text-overflow      : ellipsis;
+	padding            : 0 !important;
+}
+.line-clamp:after
+{
+	content    : '...';
+	text-align : right;
+	bottom     : 0;
+	right      : 0;
+	width      : 25%;
+	display    : block;
+	position   : absolute;
+	height     : calc(1em * 1.2);
+	background : linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 75%);
+}
+@supports (-webkit-line-clamp: 1)
+{
+	.line-clamp:after
+	{
+		display : none !important;
+	}
+}
+.chemmal-line-clamp-2 {
+    -webkit-line-clamp : 2 !important;
+      max-height: calc(1em * var(--chemmal-line-height) * 2);
+}
+}
