@@ -61,3 +61,8 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_PATH: ./web
+
+      - name: Perform lighthouse audit
+        uses: ./.github/actions/lighthouse.test
+        with:
+          url: https://readme-later.web.app

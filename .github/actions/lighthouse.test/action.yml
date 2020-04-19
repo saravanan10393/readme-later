@@ -1,0 +1,15 @@
+name: Light house audit
+description: Performs the lighthoue audit for the given url
+
+inputs:
+  url:
+    description: url to audit
+    required: true
+
+outputs:
+  metrics:
+    description: provides light house audit results
+
+runs:
+  using: "node12"
+  main: "index.js"
