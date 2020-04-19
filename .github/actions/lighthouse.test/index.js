@@ -34,10 +34,10 @@ const rootDirectory = '.'
 const files = [
   'report.html'
 ]
-const options = {
+const artifactOptions = {
   continueOnError: false
 }
-const uploadResponse = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options)
+const uploadResponse = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, artifactOptions)
 core.info("done uploading artifact")
 
 core.setOutput("metrics", myOutput);
