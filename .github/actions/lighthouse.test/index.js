@@ -37,9 +37,12 @@ const files = [
 const artifactOptions = {
   continueOnError: false
 }
-const uploadResponse = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, artifactOptions)
-core.info("done uploading artifact")
 
-core.setOutput("metrics", myOutput);
+artifactClient.uploadArtifact(artifactName, files, rootDirectory, artifactOptions)
+.then(res => {
+  core.debug(res);
+  core.info("done uploading artifact")
+  core.setOutput("metrics", myOutput);
+})
 
 core.endGroup();
