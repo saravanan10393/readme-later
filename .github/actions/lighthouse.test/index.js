@@ -6,6 +6,8 @@ const artifactClient = artifact.create()
 
 const url = core.getInput("url", { required: true });
 
+core.debug("input url ", url);
+
 core.startGroup("starting lighthouse audit");
 
 let myOutput = '';
