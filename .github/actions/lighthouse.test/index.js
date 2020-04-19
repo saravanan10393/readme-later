@@ -21,8 +21,9 @@ options.listeners = {
   }
 };
 
-exec.exec(`npx lhci autorun`, options)
+exec.exec(`npx lhci collect --url=${url}`, options)
 .then(res => {
+  core.debug(res);
   core.debug(myOutput);
   core.warning(myError);
 
@@ -30,9 +31,9 @@ exec.exec(`npx lhci autorun`, options)
 
   core.info("uploading artifact");
   const artifactName = 'lighthouse-result';
-  const rootDirectory = '.'
+  const rootDirectory = './.github/actions/.lighthouseci'
   const files = [
-    'report.html'
+    '/*'
   ]
   const artifactOptions = {
     continueOnError: false
