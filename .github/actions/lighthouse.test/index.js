@@ -21,7 +21,7 @@ options.listeners = {
   }
 };
 
-exec.exec(`npx lighthouse ${url} --verbose --output html --output-path ./report.html`, options)
+exec.exec(`npx lhci autorun`, options)
 .then(res => {
   core.debug(myOutput);
   core.warning(myError);
