@@ -21,28 +21,29 @@ options.listeners = {
   }
 };
 
-exec(`npx lighthouse ${url} --verbose --output html --output-path ./report.html`, options)
-
-core.debug(myOutput);
-core.warning(myError);
-
-core.info("completed audit");
-
-core.info("uploading artifact");
-const artifactName = 'lighthouse-result';
-const rootDirectory = '.'
-const files = [
-  'report.html'
-]
-const artifactOptions = {
-  continueOnError: false
-}
-
-artifactClient.uploadArtifact(artifactName, files, rootDirectory, artifactOptions)
+exec.exec(`npx lighthouse ${url} --verbose --output html --output-path ./report.html`, options)
 .then(res => {
-  core.debug(res);
-  core.info("done uploading artifact")
-  core.setOutput("metrics", myOutput);
-})
+  core.debug(myOutput);
+  core.warning(myError);
 
-core.endGroup();
+  core.info("completed audit");
+
+  core.info("uploading artifact");
+  const artifactName = 'lighthouse-result';
+  const rootDirectory = '.'
+  const files = [
+    'report.html'
+  ]
+  const artifactOptions = {
+    continueOnError: false
+  }
+
+  artifactClient.uploadArtifact(artifactName, files, rootDirectory, artifactOptions)
+  .then(res => {
+    core.debug(res);
+    core.info("done uploading artifact")
+    core.setOutput("metrics", myOutput);
+  })
+
+  core.endGroup();
+})
