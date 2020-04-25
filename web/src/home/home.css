@@ -1,14 +1,15 @@
-.mainContainer{
+.mainContainer {
   display: grid;
   grid-template-rows: 6rem 1fr;
   height: 100%;
   width: 100%;
 }
 
-.topNav{
+.topNav {
   padding: var(--space-4) var(--space-16);
   box-sizing: border-box;
   display: grid;
+  grid-template-columns: 1fr max-content max-content;
   align-items: center;
   border-bottom: 1px solid var(--bg-gray-3);
   box-shadow: var(--shadow-4dp);
@@ -17,7 +18,7 @@
   background: var(--white);
 }
 
-.container{
+.container {
   display: grid;
   grid-template-columns: max-content 1fr;
   grid-auto-rows: 1fr;
@@ -25,7 +26,7 @@
   overflow: hidden;
 }
 
-.sideNav{
+.sideNav {
   padding: var(--space-8) 0;
   background: var(--white);
   border-right: 1px solid var(--bg-gray-4);
@@ -33,12 +34,12 @@
   top: 0px;
 }
 
-.contentContainer{
+.contentContainer {
   padding: var(--space-36);
   overflow-y: auto;
 }
 
-.card{
+.card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -51,18 +52,18 @@
   margin-bottom: 0.5rem;
 }
 
-.card .deleteButton{
+.card .deleteButton {
   visibility: hidden;
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
 }
 
-.card:hover .deleteButton{
+.card:hover .deleteButton {
   visibility: visible;
 }
 
-.addUrl{
+.addUrl {
   /* width: 23rem; */
   display: grid;
   grid-row-gap: 1rem;
@@ -70,27 +71,27 @@
   margin: 0 1.5rem 1.5rem 0;
 }
 
-.addUrl input{
+.addUrl input {
   padding: 0 var(--space-4);
   width: 100%;
 }
 
-.image{
+.image {
   max-height: 10rem;
   max-width: 100%;
 }
 
-.select{
+.select {
   max-height: 30rem;
 }
 
-.tagList{
+.tagList {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.tagList .tag{
+.tagList .tag {
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
 }

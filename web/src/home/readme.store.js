@@ -6,8 +6,10 @@ import {
   getAllData as getFromDB,
   updateUrl,
   addTag,
-  deleteUrl as deleteUrlFromDB
+  deleteUrl as deleteUrlFromDB,
 } from "./readme.db";
+
+import { FBStore } from "../utils/firebase.util";
 
 export const [useStore, StoreApi] = create((setState, getState) => {
   return {
@@ -15,7 +17,7 @@ export const [useStore, StoreApi] = create((setState, getState) => {
     tags: [],
     selectedTags: [],
     filteredUrls: [],
-    initialize() {
+    initialize(links, tags) {
       // let links = new Array(30).fill(10).map(() => ({
       //   id: shortId.generate(),
       //   title: "Google",
@@ -42,7 +44,7 @@ export const [useStore, StoreApi] = create((setState, getState) => {
         }, {});
 
         setState(
-          produce(state => {
+          produce((state) => {
             state.urls = linkObjs;
             state.tags = tags;
             return state;
@@ -60,18 +62,26 @@ export const [useStore, StoreApi] = create((setState, getState) => {
     },
     getUrls() {},
 
+    setUrls(links) {
+      setState({ urls: links });
+    },
+
+    setTags(tags) {
+      setState({ tags });
+    },
+
     selectTag(tag) {
       let selectedTags = getState().selectedTags;
       if (selectedTags.includes(tag) === false) {
         setState(
-          produce(state => {
+          produce((state) => {
             state.selectedTags.push(tag);
             return state;
           })
         );
       } else {
         setState({
-          selectedTags: selectedTags.filter(t => t !== tag)
+          selectedTags: selectedTags.filter((t) => t !== tag),
         });
       }
 
@@ -81,16 +91,16 @@ export const [useStore, StoreApi] = create((setState, getState) => {
     filterUrls() {
       let { selectedTags, urls } = getState();
 
-      let filteredUrls = Object.values(urls).filter(url => {
+      let filteredUrls = Object.values(urls).filter((url) => {
         let tagStr = url.tags.join(",");
         let matchedTags = selectedTags
-          .map(tag => tagStr.search(new RegExp(tag)) > -1)
+          .map((tag) => tagStr.search(new RegExp(tag)) > -1)
           .filter(Boolean);
         return selectedTags.length === matchedTags.length;
       });
 
       setState({
-        filteredUrls
+        filteredUrls,
       });
     },
 
@@ -99,61 +109,58 @@ export const [useStore, StoreApi] = create((setState, getState) => {
       return fetch("https://api.linkpreview.net", {
         method: "POST",
         mode: "cors",
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       })
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           res.title = res.title || url;
-          let preview = Object.assign(
+          let link = Object.assign(
             {
               id: new Date().getTime(),
               createdAt: new Date(),
-              tags: getState().selectedTags
+              tags: getState().selectedTags,
             },
             res
           );
           setState({
             urls: Object.assign(
               {
-                [preview.id]: preview
+                [link.id]: link,
               },
               getState().urls
-            )
+            ),
           });
-          //   produce(state => {
-          //     state.urls[preview.id] = preview;
-          //     return state;
-          //   })
-          // );
-          addUrlToDB(preview);
+          FBStore.setLink(link);
+          addUrlToDB(link);
         });
     },
 
     updateUrl(urlId, data = {}) {
       setState(
-        produce(state => {
+        produce((state) => {
           state.urls[urlId] = Object.assign({}, state.urls[urlId], data);
           return state;
         })
       );
-
+      FBStore.setLink(Object.assign({ id: urlId }, data));
       updateUrl(urlId, data);
     },
 
     deleteUrl(urlId) {
       setState(
-        produce(state => {
+        produce((state) => {
           Reflect.deleteProperty(state.urls, urlId);
           return state;
         })
       );
+      FBStore.deleteLink(urlId);
       deleteUrlFromDB(urlId);
     },
 
     addTag(tag, urlId) {
       let hasChanged = false;
       setState(
-        produce(state => {
+        produce((state) => {
           state.urls[urlId].tags = state.urls[urlId].tags || [];
           if (state.urls[urlId].tags.includes(tag) === false) {
             state.urls[urlId].tags.push(tag);
@@ -168,17 +175,18 @@ export const [useStore, StoreApi] = create((setState, getState) => {
       );
       if (hasChanged) {
         updateUrl(urlId, { tags: getState().urls[urlId].tags });
+        FBStore.setLink({ id: urlId, tags: getState().urls[urlId].tags });
       }
     },
 
     removeTag(tagToRemove, urlId) {
       let hasChanged = false;
       setState(
-        produce(state => {
+        produce((state) => {
           state.urls[urlId].tags = state.urls[urlId].tags || [];
           if (state.urls[urlId].tags.includes(tagToRemove)) {
             state.urls[urlId].tags = state.urls[urlId].tags.filter(
-              tag => tag !== tagToRemove
+              (tag) => tag !== tagToRemove
             );
             hasChanged = true;
           }
@@ -187,7 +195,8 @@ export const [useStore, StoreApi] = create((setState, getState) => {
       );
       if (hasChanged) {
         updateUrl(urlId, { tags: getState().urls[urlId].tags });
+        FBStore.setLink({ id: urlId, tags: getState().urls[urlId].tags });
       }
-    }
+    },
   };
 });

@@ -1,7 +1,5 @@
 {
   "eslint.enable": true,
   "eslint.format.enable": true,
-  "eslint.workingDirectories": [
-    "web"
-  ]
+  "eslint.workingDirectories": ["web"]
 }

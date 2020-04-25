@@ -63,7 +63,7 @@ const prdConfig = {
   // In production, we only want to load the polyfills and the app code.
   entry: {
     // polyfills: require.resolve('./polyfills'),
-    app: paths.appIndexJs
+    app: paths.appIndexJs,
   },
   output: {
     ecmaVersion: 8,
@@ -77,8 +77,10 @@ const prdConfig = {
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info =>
-      path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, "/")
+    devtoolModuleFilenameTemplate: (info) =>
+      path
+        .relative(paths.appSrc, info.absoluteResourcePath)
+        .replace(/\\/g, "/"),
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -99,7 +101,7 @@ const prdConfig = {
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      "react-native": "react-native-web"
+      "react-native": "react-native-web",
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -107,8 +109,8 @@ const prdConfig = {
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])
-    ]
+      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+    ],
   },
   module: {
     strictExportPresence: true,
@@ -126,12 +128,12 @@ const prdConfig = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve("eslint"),
-              configFile: ".eslintrc"
+              configFile: ".eslintrc",
             },
-            loader: require.resolve("eslint-loader")
-          }
+            loader: require.resolve("eslint-loader"),
+          },
         ],
-        include: paths.appSrc
+        include: paths.appSrc,
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -147,13 +149,13 @@ const prdConfig = {
               /\.jpe?g$/,
               /\.png$/,
               /\.jp2$/,
-              /\.webp$/
+              /\.webp$/,
             ],
             loader: require.resolve("url-loader"),
             options: {
               limit: 10000,
-              name: "static/media/[name].[contenthash:8].[ext]"
-            }
+              name: "static/media/[name].[contenthash:8].[ext]",
+            },
           },
           // Process JS with Babel.
           {
@@ -164,12 +166,12 @@ const prdConfig = {
               plugins: [
                 [
                   "@babel/plugin-transform-runtime",
-                  { version: "7.6.2", useESModules: true }
-                ]
+                  { version: "7.6.2", useESModules: true },
+                ],
               ],
               compact: true,
-              cacheDirectory: true
-            }
+              cacheDirectory: true,
+            },
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
@@ -185,7 +187,7 @@ const prdConfig = {
           // in the main CSS file.
           {
             test: /\.css$/,
-            include: function(modulePath) {
+            include: function (modulePath) {
               return (
                 /node_modules/.test(modulePath) ||
                 /src\/styles/.test(modulePath) ||
@@ -197,14 +199,14 @@ const prdConfig = {
               {
                 loader: require.resolve("css-loader"),
                 options: {
-                  sourceMap: shouldUseSourceMap
-                }
-              }
-            ]
+                  sourceMap: shouldUseSourceMap,
+                },
+              },
+            ],
           },
           {
             test: /\.css$/,
-            exclude: function(modulePath) {
+            exclude: function (modulePath) {
               return (
                 /node_modules/.test(modulePath) ||
                 /src\/styles/.test(modulePath) ||
@@ -218,8 +220,8 @@ const prdConfig = {
                 options: {
                   importLoaders: 1,
                   sourceMap: shouldUseSourceMap,
-                  modules: true
-                }
+                  modules: true,
+                },
               },
               {
                 loader: require.resolve("postcss-loader"),
@@ -235,14 +237,14 @@ const prdConfig = {
                         ">1%",
                         "last 4 versions",
                         "Firefox ESR",
-                        "not ie < 9" // React doesn't support IE8 anyway
+                        "not ie < 9", // React doesn't support IE8 anyway
                       ],
-                      flexbox: "no-2009"
-                    })
-                  ]
-                }
-              }
-            ]
+                      flexbox: "no-2009",
+                    }),
+                  ],
+                },
+              },
+            ],
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
@@ -256,8 +258,8 @@ const prdConfig = {
             // by webpacks internal loaders.
             exclude: [/\.js$/, /\.html$/, /\.json$/, /\.ttf/, /\.woff/],
             options: {
-              name: "static/media/[name].[contenthash:8].[ext]"
-            }
+              name: "static/media/[name].[contenthash:8].[ext]",
+            },
           },
           {
             test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
@@ -266,21 +268,21 @@ const prdConfig = {
                 loader: "file-loader",
                 options: {
                   name: "[name].[ext]",
-                  outputPath: "static/media/fonts/"
-                }
-              }
-            ]
-          }
+                  outputPath: "static/media/fonts/",
+                },
+              },
+            ],
+          },
           // ** STOP ** Are you adding a new loader?
           // Make sure to add the new loader(s) before the "file" loader.
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   plugins: [
     //extract the css from js and put it in seperate css file
     new MiniCssExtractPlugin({
-      filename: cssFilename
+      filename: cssFilename,
     }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
@@ -302,9 +304,9 @@ const prdConfig = {
         keepClosingSlash: true,
         minifyJS: true,
         minifyCSS: true,
-        minifyURLs: true
+        minifyURLs: true,
       },
-      chunksSortMode: "none"
+      chunksSortMode: "none",
     }),
 
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
@@ -338,8 +340,8 @@ const prdConfig = {
 
     new webpack.ProvidePlugin({
       $: "jquery",
-      jQuery: "jquery"
-    })
+      jQuery: "jquery",
+    }),
 
     // change the bundle hash only if the file is changed
     // new webpack.HashedModuleIdsPlugin(),
@@ -348,57 +350,13 @@ const prdConfig = {
     chunkIds: "named",
     moduleIds: "named",
     runtimeChunk: {
-      name: "runtime"
+      name: "runtime",
     },
     removeAvailableModules: true,
     splitChunks: {
       // include all types of chunks
       chunks: "all",
-      automaticNameDelimiter: "-"
-      // minChunks: 2,
-      // name: true,
-      // cacheGroups: {
-      //   vendors: {
-      //     test: /node_modules/,
-      //     name(module) {
-      //       // get the name. E.g. node_modules/packageName/not/this/part.js
-      //       // or node_modules/packageName
-      //       const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-      //       // npm package names are URL-safe, but some servers don't like @ symbols
-      //       return `npm.${packageName.replace('@', '')}`;
-      //     },
-      //     priority: 2,
-      //     enforce: true,
-      //     reuseExistingChunk: true
-      //   },
-      //   components: {
-      //     test: /shared\/components/,
-      //     priority: 1,
-      //     enforce: true,
-      //     reuseExistingChunk: true
-      //   },
-      //   widgets: {
-      //     test: /shared\/widgets/,
-      //     priority: 1,
-      //     enforce: true,
-      //     reuseExistingChunk: true
-      //   },
-      //   default: {
-      //     // name(module) {
-      //     //   // get the name. E.g. node_modules/packageName/not/this/part.js
-      //     //   // or node_modules/packageName
-      //     //   const paths = module.context.split('/');
-      //     //   const packageName = paths[paths.length - 1];
-      //     //   return `kf.${packageName.replace('@', '')}`;
-      //     // },
-      //     minSize: 15000,
-      //     minChunks: 1,
-      //     //enabling splitting each file to each chunk due to css duplication issue.
-      //     //enforce: true,
-      //     priority: -1,
-      //     reuseExistingChunk: true
-      //   }
-      // }
+      automaticNameDelimiter: "-",
     },
     minimizer: [
       new TerserPlugin({
@@ -408,29 +366,23 @@ const prdConfig = {
           mangle: true, // Note `mangle.properties` is `false` by default.
           module: true,
           output: {
-            comments: false
+            comments: false,
           },
           keep_classnames: true,
-          keep_fnames: true
+          keep_fnames: true,
         },
-        // chunkFilter: function(chunk) {
-        //   if(chunk.name && chunk.name === "npm.firebase") {
-        //     return false;
-        //   }
-        //   return true;
-        // },
         extractComments: true,
         sourceMap: shouldUseSourceMap,
-        parallel: true
+        parallel: true,
       }),
       new OptimizeCSSAssetsPlugin({
-        normalizeWhitespace: true
-      })
-    ]
+        normalizeWhitespace: true,
+      }),
+    ],
   },
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
-  node: false
+  node: false,
 };
 
 module.exports = prdConfig;

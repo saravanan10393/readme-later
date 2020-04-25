@@ -10,9 +10,6 @@ on:
   #   branches:
   #     - master
 
-env:
-  NODE_ENV: production
-
 jobs:
   build:
     name: build
@@ -35,6 +32,8 @@ jobs:
       - name: Take prd build
         working-directory: ./web
         run: npm run build
+        env:
+          NODE_ENV: production
 
       - name: Save build files
         uses: actions/upload-artifact@master

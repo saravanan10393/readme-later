@@ -4,11 +4,11 @@ const db = new Dexie("readMeLater");
 
 db.version(1).stores({
   links: "id, url, title",
-  tags: "++id, &name"
+  tags: "++id, &name",
 });
 
 (function setUpDatabase() {
-  db.tags.count(function(count) {
+  db.tags.count(function (count) {
     if (count === 0) {
       let defaultTags = [
         { name: "React" },
@@ -18,7 +18,7 @@ db.version(1).stores({
         { name: "Go" },
         { name: "Tools" },
         { name: "Webpack" },
-        { name: "OpenSource" }
+        { name: "OpenSource" },
       ];
       db.tags.bulkAdd(defaultTags);
     }
@@ -28,6 +28,10 @@ db.version(1).stores({
 window.addEventListener("unhandledrejection", function dbErrors(errs) {
   console.log("db errors", errs);
 });
+
+export function getDB() {
+  return db;
+}
 
 export async function addUrl(urlData) {
   await db.links.add(urlData);
@@ -39,10 +43,7 @@ export async function updateUrl(id, urlData) {
 }
 
 export async function deleteUrl(id) {
-  await db.links
-    .where("id")
-    .equals(id)
-    .delete();
+  await db.links.where("id").equals(id).delete();
 }
 
 export async function addTag(tag) {
@@ -51,12 +52,9 @@ export async function addTag(tag) {
 }
 
 export async function getAllData() {
-  let urls = await db.links
-    .orderBy("id")
-    .reverse()
-    .toArray();
+  let urls = await db.links.orderBy("id").reverse().toArray();
   console.log("urls ", urls);
   let tags = await db.tags.toArray();
 
-  return { urls, tags: tags.map(tag => tag.name) };
+  return { urls, tags: tags.map((tag) => tag.name) };
 }

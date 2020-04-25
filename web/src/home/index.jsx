@@ -12,7 +12,8 @@ import {
   Tag,
   Intent,
   Label,
-  Classes
+  Classes,
+  Tooltip,
 } from "@blueprintjs/core";
 
 import { IconNames } from "@blueprintjs/icons";
@@ -20,7 +21,10 @@ import { Select } from "@blueprintjs/select";
 import Masonry from "react-masonry-css";
 
 import { useEnter } from "../utils/useEnter";
+import { SyncLabel } from "../auth";
+
 import { useStore, StoreApi } from "./readme.store";
+import { syncDbFromFBOnceUserSignedIn } from "./sync.fb";
 
 import styles from "./home.css";
 import "./home.override.css";
@@ -28,12 +32,26 @@ import "./home.override.css";
 export function Home() {
   useEffect(function initializeLinks() {
     StoreApi.getState().initialize();
+    syncDbFromFBOnceUserSignedIn();
   }, []);
 
   return (
     <div className={styles.mainContainer}>
       <div className={styles.topNav}>
         <H2 className="thalavam-600">Readme later</H2>
+        <SyncLabel />
+        <Tooltip content="Github">
+          <a
+            target="blank"
+            href="https://github.com/saravanan10393/readme-later"
+            intent={Intent.NONE}
+            className="bp3-button bp3-minimal"
+            role="button"
+            tabIndex={0}
+          >
+            <Icon icon={IconNames.GIT_REPO} />
+          </a>
+        </Tooltip>
       </div>
       <div className={styles.container}>
         <div className={styles.sideNav}>
@@ -48,10 +66,10 @@ export function Home() {
 }
 
 function SideMenu() {
-  let tags = useStore(state => state.tags);
-  let selectedTags = useStore(state => state.selectedTags);
+  let tags = useStore((state) => state.tags);
+  let selectedTags = useStore((state) => state.selectedTags);
 
-  let isActive = tag => selectedTags.includes(tag);
+  let isActive = (tag) => selectedTags.includes(tag);
   let selectTag = StoreApi.getState().selectTag;
 
   return (
@@ -60,7 +78,7 @@ function SideMenu() {
         <Icon icon={IconNames.TAG} />
         <span className="bp3-heading h5">View by tags</span>
       </li>
-      {tags.map(tag => {
+      {tags.map((tag) => {
         let active = isActive(tag);
         return (
           <MenuItem
@@ -77,17 +95,17 @@ function SideMenu() {
 }
 
 function LinkContainer() {
-  let { allUrls, filteredUrls, selectedTags } = useStore(state => ({
+  let { allUrls, filteredUrls, selectedTags } = useStore((state) => ({
     allUrls: state.urls,
     filteredUrls: state.filteredUrls,
-    selectedTags: state.selectedTags
+    selectedTags: state.selectedTags,
   }));
 
   let gridRef = useRef(null);
 
   const getLinks = () => {
     if (selectedTags.length > 0) {
-      return filteredUrls.map(url => allUrls[url.id]);
+      return filteredUrls.map((url) => allUrls[url.id]);
     }
     return Object.values(allUrls);
   };
@@ -97,7 +115,7 @@ function LinkContainer() {
     1600: 4,
     1100: 3,
     700: 2,
-    500: 1
+    500: 1,
   };
 
   return (
@@ -135,7 +153,7 @@ function AddUrlCard() {
       });
   };
 
-  const onChange = evt => {
+  const onChange = (evt) => {
     setUrl(evt.target.value);
   };
 
@@ -143,7 +161,7 @@ function AddUrlCard() {
     addUrl();
   });
 
-  const isValidUrl = url => {
+  const isValidUrl = (url) => {
     return new RegExp(
       "https?://(www.)?[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9()]{1,6}([-a-zA-Z0-9()@:%_+.~#?&//=]*)"
     ).test(url);
@@ -176,26 +194,26 @@ function AddUrlCard() {
 
 function LinkCard({ link }) {
   LinkCard.propTypes = {
-    link: PropTypes.object.isRequired
+    link: PropTypes.object.isRequired,
   };
 
-  let tags = useStore(state => state.tags);
+  let tags = useStore((state) => state.tags);
 
   const updateTitle = useCallback(
-    value => {
+    (value) => {
       StoreApi.getState().updateUrl(link.id, { title: value });
     },
     [link.id]
   );
 
   const updateDescription = useCallback(
-    value => {
+    (value) => {
       StoreApi.getState().updateUrl(link.id, { description: value });
     },
     [link.id]
   );
 
-  const addTag = tag => {
+  const addTag = (tag) => {
     StoreApi.getState().addTag(tag, link.id);
   };
 
@@ -290,7 +308,7 @@ function LinkCard({ link }) {
         />
       </p>
       <div className={styles.tagList}>
-        {link.tags.map(tag => (
+        {(link.tags || []).map((tag) => (
           <Tag
             className={styles.tag}
             interactive
