@@ -18,9 +18,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@master
 
+      # installing packages from github repository bug fix for actions
+      # https://github.community/t5/GitHub-Actions/Installing-an-npm-module-from-a-private-GitHub-repository/td-p/42821
       - name: Install dependencies
         working-directory: ./web
-        run: npm ci
+        run: |
+          sed -i 's/ssh:\/\/git@github.com/https:\/\/${{ secrets.NODE_AUTH_TOKEN }}:x-oauth-basic@github.com/g' package.json
+          cat package.json
+          npm install
 
       - name: Check current directory
         working-directory: ./web/node_modules
