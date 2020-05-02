@@ -49,10 +49,8 @@ export const FBStore = {
   async uploadData({ urls, tags }, userId = this.getUserId()) {
     if (!this.isLoggedIn()) return;
     await this.initialize();
-    firebase.database().ref(`users/${userId}`).set({
-      links: urls,
-      tags,
-    });
+    firebase.database().ref(`users/${userId}/links`).update(urls);
+    firebase.database().ref(`users/${userId}/tags`).update(tags);
   },
 
   async updateTags(tags, userId = this.getUserId()) {

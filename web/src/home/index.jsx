@@ -39,6 +39,7 @@ export function Home() {
     <div className={styles.mainContainer}>
       <div className={styles.topNav}>
         <H2 className="thalavam-600">Readme later</H2>
+        <Filterbox />
         <SyncLabel />
         <Tooltip content="Github">
           <a
@@ -60,6 +61,57 @@ export function Home() {
         <div className={`${styles.contentContainer}`}>
           <LinkContainer />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function Filterbox() {
+  let inputRef = React.useRef();
+  let [keyword, setKeyWord] = useState("");
+
+  useEffect(function searchShortCut() {
+    console.log("registering eventgs");
+    function keydownHandler(e) {
+      if (e.key === "f" && e.metaKey) {
+        e.preventDefault();
+        inputRef.current.focus();
+      }
+    }
+
+    document.addEventListener("keydown", keydownHandler);
+    return () => document.removeEventListener("keydown", keydownHandler);
+  }, []);
+
+  useEffect(
+    function debounce() {
+      let { searchUrls } = StoreApi.getState();
+      let timerId = setTimeout(function () {
+        console.log(" debouce called ", keyword);
+        searchUrls(keyword);
+      }, 200);
+      return () => clearTimeout(timerId);
+    },
+    [keyword]
+  );
+
+  const onSearch = (e) => {
+    setKeyWord(e.target.value);
+  };
+
+  return (
+    <div className={styles.searchBox}>
+      <div className="bp3-input-group bp3.large">
+        <span className="bp3-icon bp3-icon-search" />
+        <input
+          value={keyword}
+          onChange={onSearch}
+          ref={inputRef}
+          className="bp3-input"
+          type="search"
+          placeholder="Search input"
+          dir="auto"
+        />
       </div>
     </div>
   );
@@ -95,11 +147,14 @@ function SideMenu() {
 }
 
 function LinkContainer() {
-  let { allUrls, filteredUrls, selectedTags } = useStore((state) => ({
-    allUrls: state.urls,
-    filteredUrls: state.filteredUrls,
-    selectedTags: state.selectedTags,
-  }));
+  let { allUrls, filteredUrls, selectedTags, searchedUrls } = useStore(
+    (state) => ({
+      allUrls: state.urls,
+      filteredUrls: state.filteredUrls,
+      selectedTags: state.selectedTags,
+      searchedUrls: state.searchedUrls,
+    })
+  );
 
   let gridRef = useRef(null);
 
@@ -107,7 +162,7 @@ function LinkContainer() {
     if (selectedTags.length > 0) {
       return filteredUrls.map((url) => allUrls[url.id]);
     }
-    return Object.values(allUrls);
+    return searchedUrls.map((urlId) => allUrls[urlId]);
   };
 
   const breakpointColumnsObj = {
@@ -199,12 +254,12 @@ function LinkCard({ link }) {
 
   let tags = useStore((state) => state.tags);
 
-  const updateTitle = useCallback(
-    (value) => {
-      StoreApi.getState().updateUrl(link.id, { title: value });
-    },
-    [link.id]
-  );
+  // const updateTitle = useCallback(
+  //   (value) => {
+  //     StoreApi.getState().updateUrl(link.id, { title: value });
+  //   },
+  //   [link.id]
+  // );
 
   const updateDescription = useCallback(
     (value) => {
@@ -273,13 +328,9 @@ function LinkCard({ link }) {
         <H3 title={link.title}>
           <a
             href={link.url}
+            className={styles.cardLink}
             target="blank"
-            defaultValue={link.title}
             intent="primary"
-            maxLength={150}
-            multiline
-            onConfirm={updateTitle}
-            placeholder="Add title"
           >
             {link.title}
           </a>

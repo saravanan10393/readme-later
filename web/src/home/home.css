@@ -9,7 +9,7 @@
   padding: var(--space-4) var(--space-16);
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 1fr max-content max-content;
+  grid-template-columns: 2fr 0.5fr max-content max-content;
   align-items: center;
   border-bottom: 1px solid var(--bg-gray-3);
   box-shadow: var(--shadow-4dp);
@@ -50,6 +50,10 @@
 
 .card > * {
   margin-bottom: 0.5rem;
+}
+
+.cardLink {
+  word-break: break-word;
 }
 
 .card .deleteButton {

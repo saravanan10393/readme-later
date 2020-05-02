@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import produce from "immer";
+import Fuse from "fuse.js";
 
 import {
   addUrl as addUrlToDB,
@@ -17,6 +18,7 @@ export const [useStore, StoreApi] = create((setState, getState) => {
     tags: [],
     selectedTags: [],
     filteredUrls: [],
+    searchedUrls: [],
     initialize(links, tags) {
       // let links = new Array(30).fill(10).map(() => ({
       //   id: shortId.generate(),
@@ -43,13 +45,11 @@ export const [useStore, StoreApi] = create((setState, getState) => {
           return c;
         }, {});
 
-        setState(
-          produce((state) => {
-            state.urls = linkObjs;
-            state.tags = tags;
-            return state;
-          })
-        );
+        setState({
+          urls: linkObjs,
+          tags,
+          searchedUrls: Object.keys(linkObjs),
+        });
       });
 
       // setState(
@@ -104,6 +104,23 @@ export const [useStore, StoreApi] = create((setState, getState) => {
       });
     },
 
+    searchUrls(searchText) {
+      let { urls } = getState();
+      let searchKeys = ["title", "tags", "description"];
+      //by default the result will hold all the values
+      let searchResults = Object.keys(urls);
+      const fuse = new Fuse(Object.values(urls), {
+        keys: searchKeys,
+      });
+
+      if (searchText) {
+        searchResults = fuse.search(searchText).map((data) => data.item.id);
+      }
+      setState({
+        searchedUrls: searchResults,
+      });
+    },
+
     addUrl(url) {
       var data = { key: "050cf96571c92512e2fac3f36fe5c0e9", q: url };
       return fetch("https://api.linkpreview.net", {
@@ -122,13 +139,15 @@ export const [useStore, StoreApi] = create((setState, getState) => {
             },
             res
           );
+          let urls = Object.assign(
+            {
+              [link.id]: link,
+            },
+            getState().urls
+          );
           setState({
-            urls: Object.assign(
-              {
-                [link.id]: link,
-              },
-              getState().urls
-            ),
+            urls,
+            searchedUrls: Object.keys(urls),
           });
           FBStore.setLink(link);
           addUrlToDB(link);
@@ -147,12 +166,17 @@ export const [useStore, StoreApi] = create((setState, getState) => {
     },
 
     deleteUrl(urlId) {
-      setState(
-        produce((state) => {
-          Reflect.deleteProperty(state.urls, urlId);
-          return state;
-        })
-      );
+      let { [urlId]: omit, ...urls } = getState().urls;
+      setState({
+        urls,
+        searchedUrls: Object.keys(urls),
+      });
+      // setState(
+      //   produce((state) => {
+      //     Reflect.deleteProperty(state.urls, urlId);
+      //     return state;
+      //   })
+      // );
       FBStore.deleteLink(urlId);
       deleteUrlFromDB(urlId);
     },

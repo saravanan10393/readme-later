@@ -8,32 +8,28 @@ export function syncDbFromFBOnceUserSignedIn() {
     if (user) {
       console.log("firebase user", user);
       db.links.count(async function (count) {
-        if (count === 0) {
-          //sync local db from firebase
-          let links = await FBStore.getLinks();
-          if (links) {
-            StoreApi.getState().setUrls(links);
-            db.links.bulkAdd(Object.values(links));
-          }
-        } else {
-          //sync local db  to firebase when user login firstTime with links already added
-          let { urls } = await getAllData();
-          urls = urls.reduce((cc, url) => {
-            cc[url.id] = url;
-            return cc;
-          }, {});
-          console.log("sync ", urls);
-          const tags = await db.tags.toArray();
-          FBStore.uploadData({ urls, tags });
-        }
-      });
+        //sync local db  to firebase when user login
+        let { urls } = await getAllData();
+        urls = urls.reduce((cc, url) => {
+          cc[url.id] = url;
+          return cc;
+        }, {});
+        console.log("sync ", urls);
+        let tags = await db.tags.toArray();
+        await FBStore.uploadData({ urls, tags });
 
-      let tags = await FBStore.getTags();
-      if (tags) {
-        db.tags.bulkAdd(tags);
-        tags = tags.map((tag) => tag.name);
-        StoreApi.getState().setTags(tags);
-      }
+        //sync firebase data to local db
+        let links = await FBStore.getLinks();
+        if (links) {
+          db.links.bulkPut(Object.values(links));
+        }
+
+        tags = await FBStore.getTags();
+        if (tags) {
+          db.tags.bulkPut(tags);
+        }
+        StoreApi.getState().initialize();
+      });
     }
   });
 }

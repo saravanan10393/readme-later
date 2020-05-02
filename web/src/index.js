@@ -8,3 +8,6 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 import { App } from "./app.jsx";
 
 render(<App />, document.getElementById("root"));
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
