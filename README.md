@@ -1,5 +1,7 @@
 # readme-later
-Easy way to manage all your reference material links in one place
+Easy way to manage all your reference material links in one place.
+
+![readme-later.gif](./readme-later.gif)
 
 ## Feature pipeline
 1. Chrome extension to get easy access to add and get saved link
