@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@actions/artifact": "^0.3.0",
-    "@actions/core": "^1.2.3",
+    "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.3",
     "@lhci/cli": "^0.3.12",
     "lighthouse": "^5.6.0",
