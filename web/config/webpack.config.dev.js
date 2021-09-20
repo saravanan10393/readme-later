@@ -8,6 +8,8 @@ const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeM
 const eslintFormatter = require("react-dev-utils/eslintFormatter");
 const ModuleScopePlugin = require("react-dev-utils/ModuleScopePlugin");
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 const InjectExternalsPlugin = require("./inject.external");
 const getClientEnvironment = require("./env");
 const paths = require("./paths");
@@ -49,11 +51,16 @@ module.exports = {
     // require.resolve('webpack/hot/dev-server'),
     // require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
-    paths.appIndexJs
+    paths.appIndexJs,
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
   ],
+  experiments: {
+    outputModule: true,
+  },
+  externals: packageJson.externals.development,
+  externalsType: "module",
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
     path: paths.appBuild,
@@ -68,8 +75,10 @@ module.exports = {
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info =>
-      path.resolve(info.absoluteResourcePath).replace(/\\/g, "/")
+    devtoolModuleFilenameTemplate: (info) =>
+      path.resolve(info.absoluteResourcePath).replace(/\\/g, "/"),
+
+    module: true,
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -90,7 +99,7 @@ module.exports = {
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      "react-native": "react-native-web"
+      "react-native": "react-native-web",
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -98,12 +107,9 @@ module.exports = {
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      new ModuleScopePlugin(paths.appSrc, [
-        paths.appPackageJson,
-        paths.resolvePath("../client/core/")
-      ])
+      // new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
     ],
-    symlinks: false
+    symlinks: false,
   },
   module: {
     strictExportPresence: true,
@@ -124,11 +130,11 @@ module.exports = {
               cache: true,
               formatter: eslintFormatter,
               eslintPath: require.resolve("eslint"),
-              configFile: ".eslintrc"
+              configFile: ".eslintrc",
             },
-            loader: require.resolve("eslint-loader")
-          }
-        ]
+            loader: require.resolve("eslint-loader"),
+          },
+        ],
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -143,20 +149,20 @@ module.exports = {
             loader: require.resolve("url-loader"),
             options: {
               limit: 10000,
-              name: "web/static/media/[name].[hash:8].[ext]"
-            }
+              name: "web/static/media/[name].[hash:8].[ext]",
+            },
           },
           // Process JS with Babel.
           {
             test: /\.(js|jsx)$/,
-            include: [paths.resolvePath("../client/core/"), paths.appSrc],
-            loader: require.resolve("babel-loader"),
-            options: {
-              // This is a feature of `babel-loader` for webpack (not Babel itself).
-              // It enables caching results in ./node_modules/.cache/babel-loader/
-              // directory for faster rebuilds.
-              cacheDirectory: true
-            }
+            include: [paths.appSrc],
+            loader: require.resolve("swc-loader"),
+            // options: {
+            // This is a feature of `babel-loader` for webpack (not Babel itself).
+            // It enables caching results in ./node_modules/.cache/babel-loader/
+            // directory for faster rebuilds.
+            // cacheDirectory: true,
+            // },
           },
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -165,7 +171,7 @@ module.exports = {
           // in development "style" loader enables hot editing of CSS.
           {
             test: /\.css$/,
-            include: function(modulePath) {
+            include: function (modulePath) {
               return (
                 /node_modules/.test(modulePath) ||
                 /src\/styles/.test(modulePath) ||
@@ -173,16 +179,16 @@ module.exports = {
               );
             },
             use: [
-              require.resolve("style-loader"),
+              MiniCssExtractPlugin.loader,
               {
                 loader: require.resolve("css-loader"),
-                options: {}
-              }
-            ]
+                options: {},
+              },
+            ],
           },
           {
             test: /\.css$/,
-            exclude: function(modulePath) {
+            exclude: function (modulePath) {
               return (
                 /node_modules/.test(modulePath) ||
                 /src\/styles/.test(modulePath) ||
@@ -191,14 +197,14 @@ module.exports = {
             },
             //paths.resolvePath("src/styles")
             use: [
-              require.resolve("style-loader"),
+              MiniCssExtractPlugin.loader,
               {
                 loader: require.resolve("css-loader"),
                 options: {
                   importLoaders: 1,
                   modules: true,
-                  import: true
-                }
+                  import: true,
+                },
               },
               {
                 loader: require.resolve("postcss-loader"),
@@ -206,21 +212,10 @@ module.exports = {
                   // Necessary for external CSS imports to work
                   // https://github.com/facebookincubator/create-react-app/issues/2677
                   ident: "postcss",
-                  plugins: () => [
-                    require("postcss-flexbugs-fixes"),
-                    autoprefixer({
-                      browsers: [
-                        ">1%",
-                        "last 4 versions",
-                        "Firefox ESR",
-                        "not ie < 9" // React doesn't support IE8 anyway
-                      ],
-                      flexbox: "no-2009"
-                    })
-                  ]
-                }
-              }
-            ]
+                  plugins: () => [require("postcss-flexbugs-fixes")],
+                },
+              },
+            ],
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
@@ -235,10 +230,10 @@ module.exports = {
             exclude: [/\.js$/, /\.html$/, /\.json$/, /\.ttf/, /\.woff/],
             loader: require.resolve("file-loader"),
             options: {
-              name: "web/static/media/[name].[hash:8].[ext]"
-            }
-          }
-        ]
+              name: "web/static/media/[name].[hash:8].[ext]",
+            },
+          },
+        ],
       },
       {
         test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
@@ -247,21 +242,39 @@ module.exports = {
             loader: "file-loader",
             options: {
               name: "[name].[ext]",
-              outputPath: "web/static/media/fonts/"
-            }
-          }
-        ]
-      }
+              outputPath: "web/static/media/fonts/",
+            },
+          },
+        ],
+      },
       // ** STOP ** Are you adding a new loader?
       // Make sure to add the new loader(s) before the "file" loader.
-    ]
+    ],
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
-      chunks: ["main"]
+      inject: false,
+      templateContent: ({htmlWebpackPlugin}) => `
+        <html>
+          <head>
+            ${Object.keys(htmlWebpackPlugin.files.css).map((key) => {
+              return `<link rel="stylesheet" href="${htmlWebpackPlugin.files.css[key]}" />`;
+            })}
+            <link href="https://cdn.skypack.dev/@blueprintjs/core@v4.0.0-alpha.0/lib/css/blueprint.css" rel="stylesheet" />
+            <link href="https://cdn.skypack.dev/@blueprintjs/icons@v4.0.0-alpha.0/lib/css/blueprint-icons.css" rel="stylesheet" />
+          </head>
+          <body>
+            <noscript>You need to enable javascript</noscript>
+            <div id="root"></div>
+            ${Object.keys(htmlWebpackPlugin.files.js).map((key) => {
+              return `<script type="module" src="${htmlWebpackPlugin.files.js[key]}"></script>`;
+            })}
+          </body>
+        </html>
+      `
     }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
@@ -291,7 +304,9 @@ module.exports = {
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin({ resourceRegExp: /(^\.\/locale | moment)$/ }),
     //replace core servicejs with mock service js for development
-    new webpack.NormalModuleReplacementPlugin(/\/service$/, function(resource) {
+    new webpack.NormalModuleReplacementPlugin(/\/service$/, function (
+      resource
+    ) {
       if (process.env.ENABLE_MOCK) {
         if (!/node_modules/.test(resource.context)) {
           resource.request = resource.request.replace(
@@ -303,20 +318,16 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       $: "jquery",
-      jQuery: "jquery"
-    })
+      jQuery: "jquery",
+    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
-  node: {
-    global: true,
-    __filename: true,
-    __dirname: true
-  },
+  node: false,
   // Turn off performance hints during development because we don't do any
   // splitting or minification in interest of speed. These warnings become
   // cumbersome.
   performance: {
-    hints: false
-  }
+    hints: false,
+  },
 };

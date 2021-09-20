@@ -20,6 +20,7 @@ const { GenerateSW } = require("workbox-webpack-plugin");
 //const Critters = require('critters-webpack-plugin');
 const paths = require("./paths");
 const getClientEnvironment = require("./env");
+const pagekageJson = require(paths.appPackageJson);
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -64,8 +65,13 @@ const prdConfig = {
     // polyfills: require.resolve('./polyfills'),
     app: paths.appIndexJs,
   },
+  experiments: {
+    outputModule: true,
+  },
+  externals: pagekageJson.externals.production,
+  externalsType: "module",
   output: {
-    ecmaVersion: 8,
+    module: true,
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).
@@ -110,6 +116,7 @@ const prdConfig = {
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
     ],
+    symlinks: false,
   },
   module: {
     strictExportPresence: true,
@@ -229,18 +236,7 @@ const prdConfig = {
                   // Necessary for external CSS imports to work
                   // https://github.com/facebookincubator/create-react-app/issues/2677
                   ident: "postcss",
-                  plugins: () => [
-                    require("postcss-flexbugs-fixes"),
-                    autoprefixer({
-                      browsers: [
-                        ">1%",
-                        "last 4 versions",
-                        "Firefox ESR",
-                        "not ie < 9", // React doesn't support IE8 anyway
-                      ],
-                      flexbox: "no-2009",
-                    }),
-                  ],
+                  plugins: () => [require("postcss-flexbugs-fixes")],
                 },
               },
             ],
@@ -292,20 +288,24 @@ const prdConfig = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-      chunksSortMode: "none",
+      templateContent: ({htmlWebpackPlugin}) => `
+      <html>
+        <head>
+          ${Object.keys(htmlWebpackPlugin.files.css).map((key) => {
+            return `<link rel="stylesheet" href="${htmlWebpackPlugin.files.css[key]}" />`;
+          })}
+          <link href="https://cdn.skypack.dev/@blueprintjs/core@v4.0.0-alpha.0/lib/css/blueprint.css" rel="stylesheet" />
+          <link href="https://cdn.skypack.dev/@blueprintjs/icons@v4.0.0-alpha.0/lib/css/blueprint-icons.css" rel="stylesheet" />
+        </head>
+        <body>
+          <noscript>You need to enable javascript</noscript>
+          <div id="root"></div>
+          ${Object.keys(htmlWebpackPlugin.files.js).map((key) => {
+            return `<script type="module" src="${htmlWebpackPlugin.files.js[key]}"></script>`;
+          })}
+        </body>
+      </html>
+    `
     }),
 
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),

@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { Button, Intent, Tooltip } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
+import {
+  Delta as DeltaIcon,
+  Endorsed as EndrosedIcon,
+} from "@blueprintjs/icons";
 
 import { useAuthStore, AuthAPI } from "./auth.store";
 
@@ -18,14 +21,14 @@ export function SyncLabel() {
             onClick={AuthAPI.getState().login}
             intent={Intent.WARNING}
             minimal
-            icon={IconNames.DELTA}
+            icon={<DeltaIcon />}
           >
             Enable Sync
           </Button>
         </Tooltip>
       ) : (
         <Tooltip content="All changes were synced to server">
-          <Button intent={Intent.SUCCESS} minimal icon={IconNames.ENDORSED}>
+          <Button intent={Intent.SUCCESS} minimal icon={<EndrosedIcon />}>
             Sync Enabled
           </Button>
         </Tooltip>

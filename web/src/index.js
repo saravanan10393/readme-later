@@ -2,8 +2,8 @@ import React from "react";
 import { render } from "react-dom";
 
 import "./styles/index.css";
-import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-import "@blueprintjs/core/lib/css/blueprint.css";
+// import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+// import "~@blueprintjs/core/lib/css/blueprint.css";
 
 import { App } from "./app.jsx";
 

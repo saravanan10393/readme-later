@@ -8,11 +8,17 @@
   <script>
     window.global = window;
   </script>
+  <% for (key in htmlWebpackPlugin.files.css) { %>
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.css[key] %>" />
+  <% } %>
 </head>
 
 <body>
   <noscript>You need to enable javascript</noscript>
   <div id="root"></div>
+  <% for (key in htmlWebpackPlugin.files.js) { %>
+    <script type="module" src="<%= htmlWebpackPlugin.files.js[key] %>"></script>
+  <% } %>
 </body>
 
 </html>

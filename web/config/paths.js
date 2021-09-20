@@ -42,7 +42,7 @@ module.exports = {
   // eslint-disable-next-line prettier/prettier
   appBuild: resolveApp('build'),
   appPublic: resolveApp("public"),
-  appHtml: resolveApp("public/index.html"),
+  appHtml: resolveApp("public/index.ejs"),
   appIndexJs: resolveApp("src/index.js"),
   appPackageJson: resolveApp("package.json"),
   appSrc: resolveApp("src"),

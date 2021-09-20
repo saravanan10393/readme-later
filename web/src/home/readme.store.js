@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import createStore from "zustand";
 import produce from "immer";
 import Fuse from "fuse.js";
 
@@ -12,7 +12,7 @@ import {
 
 import { FBStore } from "../utils/firebase.util";
 
-export const [useStore, StoreApi] = create((setState, getState) => {
+export const [useStore, StoreApi] = createStore((setState, getState) => {
   return {
     urls: {},
     tags: [],

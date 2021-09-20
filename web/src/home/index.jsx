@@ -6,7 +6,6 @@ import {
   H2,
   H3,
   EditableText,
-  Icon,
   Menu,
   MenuItem,
   Tag,
@@ -16,7 +15,13 @@ import {
   Tooltip,
 } from "@blueprintjs/core";
 
-import { IconNames } from "@blueprintjs/icons";
+import {
+  Add as AddIcon,
+  GitRepo as GitRepoIcon,
+  Trash as TrashIcon,
+  Tag as TagIcon,
+  Search as SearchIcon,
+} from "@blueprintjs/icons";
 import { Select } from "@blueprintjs/select";
 import Masonry from "react-masonry-css";
 
@@ -46,11 +51,11 @@ export function Home() {
             target="blank"
             href="https://github.com/saravanan10393/readme-later"
             intent={Intent.NONE}
-            className="bp3-button bp3-minimal"
+            className="bp4-button bp4-minimal"
             role="button"
             tabIndex={0}
           >
-            <Icon icon={IconNames.GIT_REPO} />
+            <GitRepoIcon />
           </a>
         </Tooltip>
       </div>
@@ -101,13 +106,13 @@ function Filterbox() {
 
   return (
     <div className={styles.searchBox}>
-      <div className="bp3-input-group bp3.large">
-        <span className="bp3-icon bp3-icon-search" />
+      <div className="bp4-input-group bp4.large">
+        <SearchIcon />
         <input
           value={keyword}
           onChange={onSearch}
           ref={inputRef}
-          className="bp3-input"
+          className="bp4-input"
           type="search"
           placeholder="Search input"
           dir="auto"
@@ -126,9 +131,9 @@ function SideMenu() {
 
   return (
     <Menu>
-      <li className="bp3-menu-header">
-        <Icon icon={IconNames.TAG} />
-        <span className="bp3-heading h5">View by tags</span>
+      <li className="bp4-menu-header">
+        <TagIcon />
+        <span className="bp4-heading h5">View by tags</span>
       </li>
       {tags.map((tag) => {
         let active = isActive(tag);
@@ -310,7 +315,7 @@ function LinkCard({ link }) {
 
   const renderCreateTagOption = (query, active, handleClick) => (
     <MenuItem
-      icon={IconNames.ADD}
+      icon={<AddIcon />}
       text={`Create "${query}"`}
       active={active}
       onClick={handleClick}
@@ -339,7 +344,7 @@ function LinkCard({ link }) {
           onClick={deleteUrl}
           className={styles.deleteButton}
           minimal
-          icon={IconNames.TRASH}
+          icon={<TrashIcon />}
           intent={Intent.DANGER}
         />
       </div>
@@ -385,7 +390,7 @@ function LinkCard({ link }) {
           createNewItemRenderer={renderCreateTagOption}
         >
           <Button minimal>
-            <Icon intent="primary" icon={IconNames.ADD} />
+            <AddIcon intent="primary" />
           </Button>
         </Select>
       </div>
