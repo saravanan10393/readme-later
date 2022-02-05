@@ -92,11 +92,14 @@ export const [useStore, StoreApi] = createStore((setState, getState) => {
       let { selectedTags, urls } = getState();
 
       let filteredUrls = Object.values(urls).filter((url) => {
-        let tagStr = url.tags.join(",");
-        let matchedTags = selectedTags
-          .map((tag) => tagStr.search(new RegExp(tag)) > -1)
-          .filter(Boolean);
-        return selectedTags.length === matchedTags.length;
+        if (url.tags) {
+          let tagStr = url.tags.join(",");
+          let matchedTags = selectedTags
+            .map((tag) => tagStr.search(new RegExp(tag)) > -1)
+            .filter(Boolean);
+          return selectedTags.length === matchedTags.length;
+        }
+        return false;
       });
 
       setState({
@@ -129,7 +132,7 @@ export const [useStore, StoreApi] = createStore((setState, getState) => {
         body: JSON.stringify(data),
       })
         .then((res) => res.json())
-        .then((res) => {
+        .then(async (res) => {
           res.title = res.title || url;
           let link = Object.assign(
             {
@@ -150,7 +153,8 @@ export const [useStore, StoreApi] = createStore((setState, getState) => {
             searchedUrls: Object.keys(urls),
           });
           FBStore.setLink(link);
-          addUrlToDB(link);
+          await addUrlToDB(link);
+          getState().filterUrls();
         });
     },
 
