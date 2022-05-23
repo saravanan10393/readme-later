@@ -8,7 +8,7 @@
     "@blueprintjs/core": "4.0.0-alpha.0",
     "@blueprintjs/icons": "^4.0.0-alpha.0",
     "@blueprintjs/select": "4.0.0-alpha.0",
-    "dexie": "3.0.3",
+    "dexie": "3.2.2",
     "firebase": "7.24.0",
     "fuse.js": "6.4.6",
     "immer": "9.0.6",
